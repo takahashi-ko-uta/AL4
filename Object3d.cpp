@@ -403,7 +403,7 @@ void Object3d::CreateModel()
 {
 	HRESULT result = S_FALSE;
 
-	//ファイルストリーム
+	//ファイルストリーム-
 	std::ifstream file;
 	//.objファイルを開く
 	file.open("Resources/triangle_tex/triangle_tex.obj");
