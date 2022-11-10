@@ -105,7 +105,7 @@ Object3d* Object3d::Create()
 	}
 
 	//スケールをセット
-	float scale_val = 20;
+	float scale_val = 10;
 	object3d->scale = { scale_val,scale_val,scale_val };
 
 	return object3d;
@@ -478,7 +478,7 @@ void Object3d::CreateModel()
 	std::ifstream file;
 	//.objファイルを開く
 	//file.open("Resources/triangle_tex/triangle_tex.obj");
-	const string modelname = "triangle_mat";
+	const string modelname = "onp";
 	const string filename = modelname + ".obj";//"triangle_mat.obj"
 	const string directoryPath = "Resources/" + modelname + "/";//"Resources/triangle_mat/"
 	file.open(directoryPath + filename);//"Resources/triangle_mat/triangle_mat.obj"
