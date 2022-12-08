@@ -115,7 +115,7 @@ void GameScene::Update()
 			<< inter.m128_f32[1] << ","
 			<< inter.m128_f32[2] << ")";
 
-		debugText.Print(spherestr.str(), 50, 220, 1.0f);kann
+		debugText.Print(spherestr.str(), 50, 220, 1.0f);
 	}
 
 
