@@ -58,6 +58,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 void GameScene::Update()
 {
+#pragma region オブジェクト移動
 	// オブジェクト移動
 	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 	{
@@ -73,7 +74,9 @@ void GameScene::Update()
 		// 座標の変更を反映
 		object3d->SetPosition(position);
 	}
+#pragma endregion
 
+#pragma region カメラ移動
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
 	{
@@ -82,7 +85,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_D)) { Object3d::CameraMoveVector({ +1.0f,0.0f,0.0f }); }
 		else if (input->PushKey(DIK_A)) { Object3d::CameraMoveVector({ -1.0f,0.0f,0.0f }); }
 	}
+#pragma endregion
 
+#pragma region 球移動
 	////球移動
 	//{
 	//	XMVECTOR moveY = XMVectorSet(0, 0.01f, 0, 0);
@@ -103,7 +108,9 @@ void GameScene::Update()
 	//	<< sphere.center.m128_f32[2] << ")";	//z
 
 	//debugText.Print(spherestr.str(), 50, 180, 1.0f);
+#pragma endregion
 
+#pragma region レイ操作
 	//レイ操作
 	{
 		XMVECTOR moveZ = XMVectorSet(0, 0, 0.01f, 0);
@@ -116,15 +123,18 @@ void GameScene::Update()
 	}
 
 	//stringstreamで変数の値を埋め込んで整形する
-	std::ostringstream spherestr;
-	spherestr << "lay.start:("
+	std::ostringstream raystr;
+	raystr << "lay.start:("
 		<< std::fixed << std::setprecision(2)	//小数点以下2桁まで
-		<< sphere.center.m128_f32[0] << ","		//x
-		<< sphere.center.m128_f32[1] << ","		//y
-		<< sphere.center.m128_f32[2] << ")";	//z
+		<< ray.start.m128_f32[0] << ","		//x
+		<< ray.start.m128_f32[1] << ","		//y
+		<< ray.start.m128_f32[2] << ")";	//z
 
-	debugText.Print(spherestr.str(), 50, 180, 1.0f);
+	debugText.Print(raystr.str(), 50, 180, 1.0f);
+#pragma endregion
 
+#pragma region 球と***の当たり判定
+	
 	////球と平面の当たり判定
 	//bool hit = Collision::CheckSphere2Plane(sphere, plane);
 	//if (hit) {
@@ -152,7 +162,7 @@ void GameScene::Update()
 	//XMVECTOR inter;
 	//bool hit = Collision::CheckSphere2Triangle(sphere, triangle, &inter);
 	//if (hit) {
-	//	debugText.Print("HIT", 50, 200, 1.0f);
+	//	debugText.Print("HIT", 50, 240, 1.0f);
 	//	//stringStreamをリセットし、交点座標を埋め込む
 	//	spherestr.str("");
 	//	spherestr.clear();
@@ -161,25 +171,52 @@ void GameScene::Update()
 	//		<< inter.m128_f32[0] << ","
 	//		<< inter.m128_f32[1] << ","
 	//		<< inter.m128_f32[2] << ")";
-	//	debugText.Print(spherestr.str(), 50, 220, 1.0f);
+	//	debugText.Print(spherestr.str(), 50, 260, 1.0f);
 	//}
 
+#pragma endregion
+
+#pragma region レイと***の当たり判定
 	//レイと平面の当たり判定
 	XMVECTOR inter;
 	float distance;
 	bool hit = Collision::CheckRay2Plane(ray, plane, &distance, &inter);
 	if (hit) {
-		debugText.Print("HIT", 50, 260, 1.0f);
+		debugText.Print("HIT", 50, 280, 1.0f);
 		//stringStreamをリセットし、交点座標を埋め込む
-		spherestr.str("");
-		spherestr.clear();
-		spherestr << "("
+		raystr.str("");
+		raystr.clear();
+		raystr << "("
 			<< std::fixed << std::setprecision(2)
 			<< inter.m128_f32[0] << ","
 			<< inter.m128_f32[1] << ","
 			<< inter.m128_f32[2] << ")";
-		debugText.Print(spherestr.str(), 50, 280, 1.0f);
+		debugText.Print(raystr.str(), 50, 300, 1.0f);
 	}
+
+	//レイと三角形の当たり判定
+	float distance;
+	XMVECTOR inter;
+	bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	if(hit){
+		debugText.Print("HIT", 50, 320, 1.0f);
+		//stringStreamをリセットし、交点座標を埋め込む
+		raystr.str("");
+		raystr.clear();
+		raystr << "("
+			<< std::fixed << std::setprecision(2)
+			<< inter.m128_f32[0] << ","
+			<< inter.m128_f32[1] << ","
+			<< inter.m128_f32[2] << ")";
+		debugText.Print(raystr.str(), 50, 340, 1.0f);
+		
+		raystr.str("");
+		raystr.clear();
+		raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
+
+		debugText.Print(raystr.str(), 50, 260, 1.0f);
+	}
+#pragma endregion
 
 	object3d->Update();
 }
