@@ -29,6 +29,17 @@ struct Plane
 };
 
 /// <summary>
+/// レイ(半直線)
+/// </summary>
+struct Ray
+{
+	//始点座標
+	DirectX::XMVECTOR start = { 0,0,0,1 };
+	//方向
+	DirectX::XMVECTOR dir = { 1,0,0,0 };
+};
+
+/// <summary>
 /// 法線付き三角形(時計回りが表面)
 /// </summary>
 class Triangle
