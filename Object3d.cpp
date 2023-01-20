@@ -5,7 +5,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include "BaseCollider.h"
+#include "CollisionManager.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -27,6 +28,15 @@ XMMATRIX Object3d::matProjection{};
 XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
 XMFLOAT3 Object3d::target = { 0, 0, 0 };
 XMFLOAT3 Object3d::up = { 0, 1, 0 };
+
+Object3d::~Object3d()
+{
+	if (collider) {
+		//コリジョンマネージャから登録を解除する
+		CollisionManager::GetInstance()->RemoveCollider(collider);
+		delete collider;
+	}
+}
 
 void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
 {
@@ -307,6 +317,12 @@ void Object3d::UpdateViewMatrix()
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
+void Object3d::SetCollider(BaseCollider* collider)
+{
+	collider->SetObject(this);
+	this->collider = collider;
+}
+
 bool Object3d::Initialize()
 {
 	// nullptrチェック
@@ -326,6 +342,9 @@ bool Object3d::Initialize()
 		D3D12_HEAP_FLAG_NONE, &resourceDesc0, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuffB0));
 	assert(SUCCEEDED(result));
+
+	//クラス名の文字列を取得
+	name = typeid(*this).name();
 
 	return true;
 }
@@ -361,7 +380,10 @@ void Object3d::Update()
 	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	constBuffB0->Unmap(0, nullptr);
 
-
+	//当たり判定更新
+	if (collider) {
+		collider->Update();
+	}
 }
 
 void Object3d::Draw()
