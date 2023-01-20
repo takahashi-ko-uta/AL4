@@ -177,29 +177,52 @@ void GameScene::Update()
 #pragma endregion
 
 #pragma region レイと***の当たり判定
-	//レイと平面の当たり判定
-	XMVECTOR inter;
-	float distance;
-	bool hit = Collision::CheckRay2Plane(ray, plane, &distance, &inter);
-	if (hit) {
-		debugText.Print("HIT", 50, 280, 1.0f);
-		//stringStreamをリセットし、交点座標を埋め込む
-		raystr.str("");
-		raystr.clear();
-		raystr << "("
-			<< std::fixed << std::setprecision(2)
-			<< inter.m128_f32[0] << ","
-			<< inter.m128_f32[1] << ","
-			<< inter.m128_f32[2] << ")";
-		debugText.Print(raystr.str(), 50, 300, 1.0f);
-	}
+	////レイと平面の当たり判定
+	//XMVECTOR inter;
+	//float distance;
+	//bool hit = Collision::CheckRay2Plane(ray, plane, &distance, &inter);
+	//if (hit) {
+	//	debugText.Print("HIT", 50, 200, 1.0f);
+	//	//stringStreamをリセットし、交点座標を埋め込む
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr << "("
+	//		<< std::fixed << std::setprecision(2)
+	//		<< inter.m128_f32[0] << ","
+	//		<< inter.m128_f32[1] << ","
+	//		<< inter.m128_f32[2] << ")";
+	//	debugText.Print(raystr.str(), 50, 220, 1.0f);
+	//}
 
-	//レイと三角形の当たり判定
+	////レイと三角形の当たり判定
+	//float distance;
+	//XMVECTOR inter;
+	//bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	//if(hit){
+	//	debugText.Print("HIT", 50, 240, 1.0f);
+	//	//stringStreamをリセットし、交点座標を埋め込む
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr << "("
+	//		<< std::fixed << std::setprecision(2)
+	//		<< inter.m128_f32[0] << ","
+	//		<< inter.m128_f32[1] << ","
+	//		<< inter.m128_f32[2] << ")";
+	//	debugText.Print(raystr.str(), 50, 260, 1.0f);
+	//	
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
+
+	//	debugText.Print(raystr.str(), 50, 280, 1.0f);
+	//}
+
+	//レイと球の当たり判定
 	float distance;
 	XMVECTOR inter;
-	bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
-	if(hit){
-		debugText.Print("HIT", 50, 320, 1.0f);
+	bool hit = Collision::CheckRay2Sphere(ray, sphere, &distance, &inter);
+	if (hit) {
+		debugText.Print("HIT", 50, 300, 1.0f);
 		//stringStreamをリセットし、交点座標を埋め込む
 		raystr.str("");
 		raystr.clear();
@@ -208,13 +231,13 @@ void GameScene::Update()
 			<< inter.m128_f32[0] << ","
 			<< inter.m128_f32[1] << ","
 			<< inter.m128_f32[2] << ")";
-		debugText.Print(raystr.str(), 50, 340, 1.0f);
-		
+		debugText.Print(raystr.str(), 50, 320, 1.0f);
+
 		raystr.str("");
 		raystr.clear();
 		raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
 
-		debugText.Print(raystr.str(), 50, 260, 1.0f);
+		debugText.Print(raystr.str(), 50, 340, 1.0f);
 	}
 #pragma endregion
 

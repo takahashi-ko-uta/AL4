@@ -59,4 +59,15 @@ public:
 	static bool CheckRay2Triangle(const Ray& ray, const Triangle& triangle,
 		float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
 
+	/// <summary>
+	/// レイと球の当たり判定
+	/// </summary>
+	/// <param name="lay">レイ</param>
+	/// <param name="sphere">球</param>
+	/// <param name="inter">距離</param>
+	/// <param name="inter">交点(平面上の最近接点)</param>
+	/// <returns>交差しているか否か</returns>
+	static bool CheckRay2Sphere(const Ray& ray, const Sphere& sphere,
+		float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
+	
 };

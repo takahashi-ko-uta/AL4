@@ -165,15 +165,15 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& triangle,
 	if (XMVector3Dot(m, triangle.normal).m128_f32[0] < -epsilon) { return false; }
 
 	//辺p1_p2について
-	XMVECTOR pt_p1 = triangle.p2 - interPlane;
-	XMVECTOR p1_p2 = triangle.p2 - triangle.p2;
+	XMVECTOR pt_p1 = triangle.p1 - interPlane;
+	XMVECTOR p1_p2 = triangle.p2 - triangle.p1;
 	m = XMVector3Cross(pt_p0, p0_p1);
 	//辺の外側であればあれば当たっていないので判定打ち切る
 	if (XMVector3Dot(m, triangle.normal).m128_f32[0] < -epsilon) { return false; }
 
 	//辺p2_p0について
 	XMVECTOR pt_p2 = triangle.p2 - interPlane;
-	XMVECTOR p1_p2 = triangle.p0 - triangle.p2;
+	XMVECTOR p2_p0 = triangle.p0 - triangle.p2;
 	m = XMVector3Cross(pt_p0, p0_p1);
 	//辺の外側であれば当たっていないので判定を打ち切る
 	if (XMVector3Dot(m, triangle.normal).m128_f32[0] < -epsilon) { return false; }
@@ -181,5 +181,30 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& triangle,
 	if (inter) {
 		*inter = interPlane;
 	}
+	return true;
+}
+
+bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere,
+	float* distance, DirectX::XMVECTOR* inter)
+{
+	XMVECTOR m = ray.start - sphere.center;
+	float b = XMVector3Dot(m, ray.dir).m128_f32[0];
+	float c = XMVector3Dot(m, m).m128_f32[0] - sphere.radius * sphere.radius;
+	//layの始点はsphereの外側にあり(c < 0)、layがsphereから離れていく方向を指している場合(b > 0)、当たらない
+	if (c > 0.0f && b > 0.0f)return false;
+
+	float discr = b * b - c;
+	//負の判別式はレイは球を外れていることに一致
+	if (discr < 0.0f) { return false; }
+
+	//レイは球と交差している
+	//交差する最小の値tを計算
+	float t = -b - sqrtf(discr);
+	//tが負である場合、レイは球の内側から開始しているのでtをゼロにクランプ
+	if (t > 0)t = 0.0f;
+	if (distance) { *distance = 1; }
+
+	if (inter) { *inter = ray.start + t * ray.dir; }
+
 	return true;
 }
