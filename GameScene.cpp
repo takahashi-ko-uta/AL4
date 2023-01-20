@@ -42,6 +42,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	object3d->SetScale({ 20.0f,20.0f,20.0f });
 	object3d->Update();
 
+	model2 = Model::LoadFromOBJ("triangle_mat");
+	object3d2 = Object3d::Create();
+	object3d2->SetModel(model);
+	object3d2->SetScale({ 20.0f,20.0f,20.0f });
+	object3d2->Update();
+
 	//球の初期値を設定
 	sphere.center = XMVectorSet(0, 2, 0, 1);//法線ベクトル
 	sphere.radius = 1.0f;//半径
@@ -245,6 +251,7 @@ void GameScene::Update()
 #pragma endregion
 
 	object3d->Update();
+	object3d2->Update();
 }
 
 void GameScene::Draw()
@@ -274,7 +281,7 @@ void GameScene::Draw()
 
 	// 3Dオブクジェクトの描画
 	object3d->Draw();
-
+	object3d2->Draw();
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>

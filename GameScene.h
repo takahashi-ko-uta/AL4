@@ -64,6 +64,9 @@ private: // メンバ変数
 	Object3d* object3d = nullptr;
 	Model* model = nullptr;
 
+	Object3d* object3d2 = nullptr;
+	Model* model2 = nullptr;
+
 	//当たり判定 球
 	Sphere sphere;
 	//当たり判定 平面
